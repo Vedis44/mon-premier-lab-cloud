@@ -1,0 +1,24 @@
+name: Test de l'Infrastructure Docker
+
+# Se déclenche à chaque push sur la branche main
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  test-docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le code depuis le dépôt
+        uses: actions/checkout@v4
+
+      - name: Vérifier la syntaxe du Docker Compose
+        run: docker compose -f serveur-web-nginx/docker-compose.yml config
+
+      - name: Tester le démarrage du serveur
+        run: |
+          cd serveur-web-nginx
+          docker compose up -d
+          docker compose ps
+          docker compose down
